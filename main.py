@@ -43,7 +43,7 @@ class MainPage(webapp2.RequestHandler):
         if not (month and day and year):
             self.write_form("That doesn't look valid to me, friend.", user_month, user_day, user_year)
         else:
-            self.redirect('/thanks')
+            self.redirect("/thanks")
     
     # writes the HTML form
     def write_form(self, error="", month="", day="", year=""):
