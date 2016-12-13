@@ -1,5 +1,6 @@
 import webapp2
 import cgi
+import string
 
 form="""
 <form method="post">
@@ -55,7 +56,7 @@ class MainPage(webapp2.RequestHandler):
 class ThanksHandler(webapp2.RequestHandler):
     def get(self):
         self.response.out.write("Thanks! That's a totally valid day!")
-        
+
 
 app = webapp2.WSGIApplication([('/', MainPage), ('/thanks', ThanksHandler)], debug=True)
 
