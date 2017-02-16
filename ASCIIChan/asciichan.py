@@ -73,10 +73,14 @@ class MainPage(Handler):
                             "WHERE ANCESTOR IS :1 "
                             "ORDER BY created DESC "
                             "LIMIT 10", art_key())
-         
+        
+        points = None
+        
         #prevent the running of multiple queries                   
-        arts = list(arts)
-                
+        if arts:
+            arts = list(arts)
+            
+        
         #find which arts have coords
         points = filter(None, (a.coords for a in arts))
         
