@@ -8,8 +8,12 @@ from string import letters
 
 import jinja2
 import webapp2
+import logging
 
+from google.appengine.api import memcache
 from google.appengine.ext import db
+
+DEBUG = os.environ['SERVER_SOFTWARE'].startswith('Development')
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -66,26 +70,31 @@ class Art(db.Model):
     created = db.DateTimeProperty(auto_now_add = True)
     coords = db.GeoPtProperty()
 
+
+
+def top_arts(update = False):
+    key = 'top'
+    arts = memcache.get(key)
+    if arts is None or update:
+        logging.error("DB QUERY")
+        arts = db.GqlQuery("Select * "
+                                "FROM Art "
+                                "WHERE ANCESTOR IS :1 "
+                                "ORDER BY created DESC "
+                                "LIMIT 10", art_key())
+        arts = list(arts)
+        memcache.set(key, arts)
+    return arts
+
 class MainPage(Handler):
     def render_front(self, error = '', title = '', art = ''):
-        arts = db.GqlQuery("Select * "
-                            "FROM Art "
-                            "WHERE ANCESTOR IS :1 "
-                            "ORDER BY created DESC "
-                            "LIMIT 10", art_key())
-        
-        points = None
-        
-        #prevent the running of multiple queries                   
-        if arts:
-            arts = list(arts)
-            
-        
-        #find which arts have coords
-        points = filter(None, (a.coords for a in arts))
+        arts = top_arts()
         
         #if we have any coords, make an image url
         img_url = None
+        
+        #find which arts have coords
+        points = filter(None, (a.coords for a in arts))
         if points:
             img_url = gmaps_img(points)
             
@@ -115,6 +124,7 @@ class MainPage(Handler):
                 p.coords = coords
             
             p.put()
+            top_arts(True)
             self.redirect('/')
         else:
             error = "we need both a title and some artwork!"
