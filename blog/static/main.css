@@ -1,7 +1,6 @@
 body {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 14px;
-
     width: 800px;
     margin: 0 auto;
     padding: 10px;
@@ -40,11 +39,11 @@ h2 {
 }
 
 label {
-  display: block;
-  font-size: 20px;
+    display: block;
+    font-size: 20px;
 }
 
-label + label {
+label+label {
     margin-top: 20px;
 }
 
@@ -56,14 +55,14 @@ input[type=text] {
 }
 
 textarea {
-  width: 500px;
-  height: 400px;
-  font-size: 17px;
-  font-family: monospace;
+    width: 500px;
+    height: 400px;
+    font-size: 17px;
+    font-family: monospace;
 }
 
 input[type=submit] {
-  font-size: 24px;
+    font-size: 24px;
 }
 
 .main-title {
@@ -76,7 +75,14 @@ input[type=submit] {
     text-decoration: none;
 }
 
-.post + .post {
+.post-link {
+    color: #222;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.post+.post {
     margin-top: 15px;
 }
 
@@ -95,10 +101,16 @@ input[type=submit] {
     right: 0px;
     bottom: 0px;
     color: #999;
-
 }
 
 .post-content {
     margin-top: 5px;
 }
 
+.age {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    color: gray;
+    front-size: 12px;
+}
