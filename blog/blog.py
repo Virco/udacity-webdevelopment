@@ -136,7 +136,7 @@ class NewPost(BlogHandler):
         if self.user:
             self.render("newpost.html")
         else:
-            self.redirect("blog/login")
+            self.redirect("/blog/login")
 
     def post(self):
         if not self.user:
@@ -147,7 +147,7 @@ class NewPost(BlogHandler):
 
         if subject and content:
             p = Post(parent = blog_key(), subject = subject, content = content)
-            p.put()
+            add_post(None, p)
             self.redirect('/blog/%s' % str(p.key().id()))
         else:
             error = "subject and content, please!"

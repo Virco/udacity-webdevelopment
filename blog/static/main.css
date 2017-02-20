@@ -20,6 +20,11 @@ body {
     text-decoration: none;
 }
 
+.newpost-link {
+    color: gray;
+    text-decoration: underline;
+}
+
 .login-link:visited {
     color: gray;
 }
