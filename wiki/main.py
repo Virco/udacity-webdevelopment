@@ -1,7 +1,6 @@
 import os
 import utils
 import webapp2
-from google.appengine.api import memcache
 from wiki import WikiPage
 
 PAGE_RE = '^[/]?[\S]+?$'
