@@ -1,0 +1,29 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/static/main.css" />
+        <title>Virco's Wiki</title>
+    </head>
+    
+    <body>
+        <div class="login-area">
+            {% if user %}
+                {% if not edit %}
+                    {% if post %}
+                        <a class="link" href="/_edit/{{post.url}}">edit</a>
+                    {% else %} 
+                        <a class="link" href="/_edit/">edit</a>
+                    {% endif %}
+                {% endif %}
+                {{user.name}} (<a class="link" href="/logout">logout</a>)
+            {% else %}
+                <a class="link" href="/login">login</a>|
+                <a class="link" href="/signup">signup</a>
+            {% endif %}
+        </div>
+        <div id="wiki">
+            {% block wiki %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

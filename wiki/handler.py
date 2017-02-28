@@ -8,7 +8,10 @@ class WikiHandler(webapp2.RequestHandler):
         
     def render_str(self, template, **params):
         params['user'] = self.user
-        return render_str(template, **params)
+        return utils.render_str(template, **params)
+        
+    def render(self, template, **kw):
+        self.write(self.render_str(template, **kw))
         
     def set_secure_cookie(self, name, val):
         cookie_val = utils.make_secure_val(val)
