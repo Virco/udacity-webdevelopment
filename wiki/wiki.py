@@ -7,9 +7,12 @@ import logging
 class WikiPage(WikiHandler):
     def get(self):
         post = get_post()
-        self.render('wiki.html', post = post)
+        logging.info("Post is: " + str(post))
+        if self.user and len(post) == 0:
+            self.redirect('/_edit' + self.request.path)
+        else:
+            self.render('wiki.html', post = post)
         logging.info("Wiki path is: " + self.request.path)
-        
     
         
 def get_post(url = "", update = False,):
