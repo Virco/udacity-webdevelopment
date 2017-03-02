@@ -15,7 +15,14 @@ body {
     right: 10px;
 }
 
-.signup-area {
+.signup-box {
+    position: absolute;
+    color: gray;
+    top: 10px;
+    left: 10px;
+}
+
+.login-box {
     position: absolute;
     color: gray;
     top: 10px;

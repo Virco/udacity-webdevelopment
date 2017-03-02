@@ -8,7 +8,7 @@ class WikiPage(WikiHandler):
     def get(self):
         post = get_post()
         self.render('wiki.html', post = post)
-        logging.info(self.request.path)
+        logging.info("Wiki path is: " + self.request.path)
         
     
         
