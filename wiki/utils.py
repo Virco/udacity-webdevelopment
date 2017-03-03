@@ -5,6 +5,10 @@ import os
 import re
 import jinja2
 from string import letters
+from google.appengine.api import memcache
+from google.appengine.ext import db
+from post import Post
+import logging
 
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
@@ -49,3 +53,34 @@ EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 def valid_email(email):
     return not email or EMAIL_RE.match(email)
 
+def add_post(post, url):
+    post.put()
+    get_post(url = url, update = True)
+    return url
+
+def get_post(url = "", update = False,):
+    mc_key = 'WIKI'
+    post_val = mc_get(url)
+    logging.info('UTILS: from MemCahce: ' + str(post_val))
+    #logging.info('UTILS: MemCache Values: ' + str(post[0]) + ', ' + m_url)
+    if update or post_val == None:
+        logging.info('UTILS: fetching post from DB')
+        post = Post.all().filter('url =', url).order('-created').fetch(1)
+        mc_set(url, post)
+        logging.info('UTILS: Post Value: ' + post[0].content)
+        return post[0]
+    return post_val
+    
+def mc_get(key):
+    return memcache.get(key)
+    
+def mc_set(key, val):
+    if mc_get(key):
+        memcache.replace(key, val)
+        logging.info('UTILS: replacing MemCache')
+    else:
+        logging.info('UTILS: adding to MemCache')
+        memcache.add(key, val)
+
+def wiki_key(name = 'default'):
+    return db.Key.from_path('wikis', name)

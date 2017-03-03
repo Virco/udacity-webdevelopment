@@ -14,4 +14,20 @@ indexes:
   properties:
   - name: url
   - name: created
+
+- kind: Post
+  properties:
+  - name: url
+  - name: created
+    direction: desc
+
+- kind: Post
+  properties:
+  - name: url
+  - name: last_modified
+
+- kind: Post
+  properties:
+  - name: url
+  - name: last_modified
     direction: desc

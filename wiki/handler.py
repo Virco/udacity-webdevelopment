@@ -26,6 +26,7 @@ class WikiHandler(webapp2.RequestHandler):
         
     def logout(self):
         self.response.headers.add_header('Set-Cookie', 'user_id=; PATH=/')
+        self.response.headers.add_header('Set-Cookie', 'ref=; PATH=/')
         
     def initialize(self, *a, **kw):
         webapp2.RequestHandler.initialize(self, *a, **kw)

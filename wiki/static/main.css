@@ -4,7 +4,28 @@ body {
     width: 800px;
     margin: 0 auto;
     padding: 10px;
+    padding-top: 90px;
     color: #333;
+}
+
+textarea {
+    width: 500px;
+    height: 400px;
+    font-size: 17px;
+    font-family: monospace;
+}
+
+input[type=submit] {
+    font-size: 24px;
+}
+
+hr {
+    margin: 20px auto;
+}
+
+label {
+        display: block;
+        font-size: 20px;
 }
 
 .login-area {

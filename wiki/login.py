@@ -1,6 +1,5 @@
 from handler import WikiHandler
 from user import User
-import utils
 import logging
 
 class Login(WikiHandler):
@@ -19,7 +18,8 @@ class Login(WikiHandler):
         
         if u:
             self.login(u)
-            self.redirect(self.request.referer)
+            cookie = self.read_secure_cookie('ref')
+            self.redirect(cookie) if cookie else self.redirect('/')
         else:
             msg = 'Invalid login'
             self.render('login-form.html', error = msg)

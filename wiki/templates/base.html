@@ -10,7 +10,7 @@
             {% if user %}
                 {% if not edit %}
                     {% if post %}
-                        <a class="link" href="/_edit/{{post.url}}">edit</a>
+                        <a class="link" href="/_edit{{post.url}}">edit</a>
                     {% else %} 
                         <a class="link" href="/_edit/">edit</a>
                     {% endif %}

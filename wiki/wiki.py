@@ -1,36 +1,20 @@
 from handler import WikiHandler
 from user import User
 from post import Post
-from google.appengine.api import memcache
 import logging
+import utils
 
 class WikiPage(WikiHandler):
     def get(self):
-        post = get_post()
-        logging.info("Post is: " + str(post))
+        post = utils.get_post(url = self.request.path)
+
+        logging.info("WIKI: Post is: " + str(post))
+        logging.info('WIKI: content: ' + str(post[0].content))
+       
         if self.user and len(post) == 0:
             self.redirect('/_edit' + self.request.path)
         else:
+            self.set_secure_cookie('ref', self.request.path)
             self.render('wiki.html', post = post)
-        logging.info("Wiki path is: " + self.request.path)
-    
         
-def get_post(url = "", update = False,):
-    mc_key = 'WIKI'
-    post, url = mc_get(mc_key)
-    if update or post is None:
-        post = Post.all().filter('url =', url).order('-created').fetch(1)
-        mc_set(mc_key, post, url)
-    return post
-    
-def mc_get(key):
-    r = memcache.get(key)
-    if r:
-        val, url = r
-    else:
-        val, url = None, ""
-    return val, url
-    
-def mc_set(key, val, url):
-    memcache.set(key, (val, url))
-    
+        logging.info("WIKI: path is: " + self.request.path)
