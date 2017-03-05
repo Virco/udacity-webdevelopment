@@ -61,24 +61,24 @@ def add_post(post, url):
 def get_post(url = ""):
     #mc_key = 'WIKI'
     post = mc_get(url)
-    #logging.info('UTILS: from MemCahce: ' + str(post_val))
-    #logging.info('UTILS: MemCache Values: ' + str(post[0]) + ', ' + m_url)
-    if post != None:
-        logging.info('UTILS: Found in MemeCache')
-        logging.info("UTILS: MemCache Value: " + str(post))
-    else:
-        logging.info('UTILS: Not Found in MemCache')
+    ##logging.info('UTILS: from MemCahce: ' + str(post_val))
+    ##logging.info('UTILS: MemCache Values: ' + str(post[0]) + ', ' + m_url)
+    #if post != None:
+        #logging.info('UTILS: Found in MemeCache')
+        #logging.info("UTILS: MemCache Value: " + str(post))
+    #else:
+        #logging.info('UTILS: Not Found in MemCache')
 
     if post is None:
-        logging.info('UTILS: fetching post from DB')
+        #logging.info('UTILS: fetching post from DB')
         results = Post.all().filter('url =', url).order('-created').fetch(1)
-        logging.info('UTILS: DB Results: ' + str(results))
+        #logging.info('UTILS: DB Results: ' + str(results))
         if len(results) == 0:
             mc_set(url, None)
-            logging.info('UTILS: Post Value: None')
+            #logging.info('UTILS: Post Value: None')
         else:
             mc_set(url, results[0])
-            logging.info('UTILS: Post Value: ' + results[0].content)
+            #logging.info('UTILS: Post Value: ' + results[0].content)
             post = results[0]
     return post
     
@@ -88,9 +88,9 @@ def mc_get(key):
 def mc_set(key, val):
     if mc_get(key):
         memcache.replace(key, val)
-        logging.info('UTILS: replacing MemCache')
+        #logging.info('UTILS: replacing MemCache')
     else:
-        logging.info('UTILS: adding to MemCache')
+        #logging.info('UTILS: adding to MemCache')
         memcache.set(key, val)
 
 def wiki_key(name = 'default'):
