@@ -6,12 +6,12 @@ import utils
 
 class WikiPage(WikiHandler):
     def get(self):
-        post = utils.get_post(url = self.request.path)
+        post = utils.get_post(self.request.path)
 
-        logging.info("WIKI: Post is: " + str(post))
-        logging.info('WIKI: content: ' + str(post[0].content))
+        # logging.info("WIKI: Post is: " + str(post))
+        # logging.info('WIKI: content: ' + str(post[0].content))
        
-        if self.user and len(post) == 0:
+        if self.user and post is None:
             self.redirect('/_edit' + self.request.path)
         else:
             self.set_secure_cookie('ref', self.request.path)

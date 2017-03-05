@@ -12,7 +12,7 @@ import logging
 
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = False)
 
 def render_str(template, **params):
     t = jinja_env.get_template(template)
@@ -55,21 +55,32 @@ def valid_email(email):
 
 def add_post(post, url):
     post.put()
-    get_post(url = url, update = True)
+    mc_set(key = url, val = post)
     return url
 
-def get_post(url = "", update = False,):
-    mc_key = 'WIKI'
-    post_val = mc_get(url)
-    logging.info('UTILS: from MemCahce: ' + str(post_val))
+def get_post(url = ""):
+    #mc_key = 'WIKI'
+    post = mc_get(url)
+    #logging.info('UTILS: from MemCahce: ' + str(post_val))
     #logging.info('UTILS: MemCache Values: ' + str(post[0]) + ', ' + m_url)
-    if update or post_val == None:
+    if post != None:
+        logging.info('UTILS: Found in MemeCache')
+        logging.info("UTILS: MemCache Value: " + str(post))
+    else:
+        logging.info('UTILS: Not Found in MemCache')
+
+    if post is None:
         logging.info('UTILS: fetching post from DB')
-        post = Post.all().filter('url =', url).order('-created').fetch(1)
-        mc_set(url, post)
-        logging.info('UTILS: Post Value: ' + post[0].content)
-        return post[0]
-    return post_val
+        results = Post.all().filter('url =', url).order('-created').fetch(1)
+        logging.info('UTILS: DB Results: ' + str(results))
+        if len(results) == 0:
+            mc_set(url, None)
+            logging.info('UTILS: Post Value: None')
+        else:
+            mc_set(url, results[0])
+            logging.info('UTILS: Post Value: ' + results[0].content)
+            post = results[0]
+    return post
     
 def mc_get(key):
     return memcache.get(key)
@@ -80,7 +91,7 @@ def mc_set(key, val):
         logging.info('UTILS: replacing MemCache')
     else:
         logging.info('UTILS: adding to MemCache')
-        memcache.add(key, val)
+        memcache.set(key, val)
 
 def wiki_key(name = 'default'):
     return db.Key.from_path('wikis', name)
