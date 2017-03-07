@@ -130,7 +130,7 @@ class User(db.Model):
         if u and valid_pw(name, pw, u.pw_hash):
             return u
 
-USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3-20}$")
+USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 def valid_username(username):
     return username and USER_RE.match(username)
 
@@ -170,7 +170,7 @@ class Signup(Handler):
             have_error = True
 
         if have_error:
-            self.render('sigup_form.html', **params)
+            self.render('signup-form.html', **params)
         else:
             u = User.register(self.username, self.password)
             u.put()
@@ -197,7 +197,7 @@ class Login(Handler):
             self.redirect(next_url)
         else:
             msg = 'Invalid login'
-            self.render('login-form', error = msg)
+            self.render('login-form.html', error = msg)
 
 class Logout(Handler):
     def get(self):
